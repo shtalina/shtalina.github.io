@@ -1,0 +1,43 @@
+{% extends 'cogn/base.html' %}
+
+{% block title %}
+Факультеты
+{% endblock %}
+
+{% block content %}
+<div class="container" align="center">
+    <h2>Факультеты, институты</h2>
+    <br>
+    <div class="container">
+        <div class="accordion" id="accordionExample">
+            {% for faculty, grouped_data in grouped_groups %}
+                <div class="accordion-item">
+                    <h2 class="accordion-header" id="heading{{ faculty.id }}">
+                        <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapse{{ faculty.id }}" aria-expanded="false" aria-controls="collapse{{ faculty.id }}">
+                            {{ faculty.name }}
+                        </button>
+                    </h2>
+                    <div id="collapse{{ faculty.id }}" class="accordion-collapse collapse" aria-labelledby="heading{{ faculty.id }}" data-bs-parent="#accordionExample">
+                        <div class="accordion-body">
+                            <div class="row">
+                                {% for kurs, groups in grouped_data %}
+                                    <div class="col">
+                                        <h6>Курс {{ kurs }}</h6>
+                                        <div class="list-group">
+
+                                            {% for group in groups %}
+                                                <a href="{% url 'stud' group.id %}" class="list-group-item list-group-item-action">{{ group.gruppa1 }}</a>
+                                            {% endfor %}
+                                        </div>
+                                    </div>
+                                {% endfor %}
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            {% endfor %}
+        </div>
+    </div>
+</div>
+
+{% endblock %}

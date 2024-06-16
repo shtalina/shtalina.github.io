@@ -1,0 +1,21 @@
+{% extends 'cogn/base.html' %}
+
+{% block title %}
+Факультеты
+{% endblock %}
+
+{% block content %}
+  <div class="faculty-accordion">
+        {% for entry in grouped_faculties %}
+            <div class="faculty">
+                <h2>{{ entry.faculty.name }}</h2>
+                <div class="group-list">
+                    {% for groups in entry.groups %}
+                        <p>{{ entry.group.gruppa }} (Курс {{ entry.group.course }})</p>
+                    {% endfor %}
+                </div>
+            </div>
+        {% endfor %}
+    </div>
+
+{% endblock %}

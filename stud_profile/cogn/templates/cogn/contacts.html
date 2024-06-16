@@ -1,0 +1,47 @@
+{% extends 'cogn/base.html' %}
+
+{% block title %}
+Обратная связь
+{% endblock %}
+
+{% block content %}
+<br>
+    <div class="container" align="center">
+        <h2>Контакты</h2>
+    </div>
+        <br>
+<br>
+
+        <div class="container" >
+            <div class="row g-0 text-left">
+                <div class="col-sm-6 col-md-6">
+                    <h3><b>Техническая поддержка</b></h3>
+                    <div>
+                    <br>
+                        <h5><b>Почта:</b> shtalina@tspu.edu.ru</h5>
+
+                    </div>
+                    <div>
+                        <br>
+                        <h5><b>Телефон:</b> 311-359, внутренний: 41-69 </h5>
+
+                    </div>
+                </div>
+                <div class="col-6 col-md-6">
+                    <h3><b>Обратная связь</b></h3>
+                    <br>
+                    <div class="mb-3">
+                        <label for="exampleFormControlInput1" class="form-label"><h4>Ваше имя</h4></label>
+                        <input type="email" class="form-control" id="exampleFormControlInput1" placeholder="Введите имя..">
+                    </div>
+                    <div class="mb-3">
+                        <label for="exampleFormControlTextarea1" class="form-label"><h4>Сообщение</h4></label>
+                        <textarea class="form-control" id="exampleFormControlTextarea1" rows="3"></textarea>
+                    </div>
+                    <button type="submit" class="btn btn-primary">Отправить</button>
+                </div>
+            </div>
+        </div>
+
+
+{% endblock %}

@@ -1,0 +1,308 @@
+{% extends 'cogn/base.html' %}
+
+{% block title %}
+Когнитивный профиль
+{% endblock %}
+
+{% block content %}
+
+  <div class="row">
+       <div class="col-md-3 offset-md-1 px-0">
+            <div class="h-95 p-5  border rounded-3 shadow">
+                <h3 class="text-secondary"><b>{{ student.fio }}</b></h3>
+                <hr class="horizontal dark mt-0">
+                   <div class="table">
+                       <table class="table">
+                           <tbody>
+
+                           <tr><td>Курс:</td><td>{{ group.kurs1}}</td></tr>
+                           <tr><td>Группа:</td><td>{{ group.gruppa1 }}</td></tr>
+                           <tr><td>Факультет:</td><td>{{ faculty.name }}</td></tr>
+                           <tr><td>Специальность:</td><td></td></tr>
+                           <tr><td>Профиль:</td><td>Информационные технологии в образовании</td></tr>
+                            </tbody>
+                       </table>
+                       <hr>
+                         {% for rec in top_recommendations %}
+                            <p><b>Рекомендация {{ forloop.counter }} </b>: {{ rec }}</p><br>
+                           {% endfor %}
+
+                   </div>
+            </div>
+        </div>
+       <div class="col-4">
+                <div class="h-80 p-5  border rounded-3 shadow">
+                    <h3 class="text-secondary"><b>Когнитивная модель обучающегося</b></h3>
+                    <hr class="horizontal dark mt-0">
+                    <div id="cognitive-graph" style="overflow: auto;">
+        {{ graph_html|safe }}
+                    </div>
+                </div>
+       </div>
+      <div class="col-3">
+       <div class="h-80 p-5 border rounded-3 shadow">
+                    <h3 class="text-secondary"><b>Компетенции</b></h3>
+                <nav>
+                <div class="nav nav-tabs card-header-tabs" id="compt-tabs" role="tablist">
+                    <button class="nav-link active" id="nav-opk-tab" data-bs-toggle="tab" data-bs-target="#opk-tab" type="button" role="tab" aria-controls="opk-tab" aria-selected="true">ОПК</button>
+                    <button class="nav-link" id="nav-uk-tab" data-bs-toggle="tab" data-bs-target="#uk-tab" type="button" role="tab" aria-controls="uk-tab" aria-selected="false">УК</button>
+                    <button class="nav-link" id="nav-pk-tab" data-bs-toggle="tab" data-bs-target="#pk-tab" type="button" role="tab" aria-controls="pk-tab" aria-selected="false">ПК</button>
+                </div>
+            </nav>
+
+            <hr class="horizontal dark mt-0">
+
+            <div class="tab-content" id="compt-content">
+                <!-- OPK Tab -->
+                <div class="tab-pane fade show active" id="opk-tab" role="tabpanel" aria-labelledby="nav-opk-tab" tabindex="0">
+                    <ul class="list-group list-group-flush">
+                        {% for compt in opk_page_obj %}
+                        <li class="list-group-item">{{ compt.comp_name|upper }}</li>
+                        {% endfor %}
+                    </ul>
+                    <!-- Pagination for OPK Competencies -->
+                    <nav aria-label="OPK Competencies Pagination">
+                        <ul class="pagination">
+                            <!-- Previous page link -->
+                            {% if opk_page_obj.has_previous %}
+                            <li class="page-item">
+                                <a class="page-link" href="?opk_page=1" aria-label="First">
+                                    &laquo; первая
+                                </a>
+                            </li>
+                            <li class="page-item">
+                                <a class="page-link" href="?opk_page={{ opk_page_obj.previous_page_number }}" aria-label="Previous">
+                                    Предыдущая
+                                </a>
+                            </li>
+                            {% endif %}
+                            <!-- Page links -->
+                            {% for num in opk_page_obj.paginator.page_range %}
+                            {% if opk_page_obj.number == num %}
+                            <li class="page-item active" aria-current="page">
+                                <span class="page-link">{{ num }}</span>
+                            </li>
+                            {% else %}
+                            <li class="page-item">
+                                <a class="page-link" href="?opk_page={{ num }}">{{ num }}</a>
+                            </li>
+                            {% endif %}
+                            {% endfor %}
+                            <!-- Next page link -->
+                            {% if opk_page_obj.has_next %}
+                            <li class="page-item">
+                                <a class="page-link" href="?opk_page={{ opk_page_obj.next_page_number }}" aria-label="Next">
+                                    Следующая
+                                </a>
+                            </li>
+                            <li class="page-item">
+                                <a class="page-link" href="?opk_page={{ opk_page_obj.paginator.num_pages }}" aria-label="Last">
+                                    Последняя &raquo;
+                                </a>
+                            </li>
+                            {% endif %}
+                        </ul>
+                    </nav>
+                </div>
+                <!-- UK Tab -->
+                <div class="tab-pane fade" id="uk-tab" role="tabpanel" aria-labelledby="nav-uk-tab" tabindex="0">
+                    <ul class="list-group list-group-flush">
+                        {% for compt in uk_page_obj %}
+                        <li class="list-group-item">{{ compt.comp_name|upper }}</li>
+                        {% endfor %}
+                    </ul>
+                    <!-- Pagination for UK Competencies -->
+                    <nav aria-label="UK Competencies Pagination">
+                        <ul class="pagination">
+                            <!-- Previous page link -->
+                            {% if uk_page_obj.has_previous %}
+                            <li class="page-item">
+                                <a class="page-link" href="?uk_page=1" aria-label="First">
+                                    &laquo; первая
+                                </a>
+                            </li>
+                            <li class="page-item">
+                                <a class="page-link" href="?uk_page={{ uk_page_obj.previous_page_number }}" aria-label="Previous">
+                                    Предыдущая
+                                </a>
+                            </li>
+                            {% endif %}
+                            <!-- Page links -->
+                            {% for num in uk_page_obj.paginator.page_range %}
+                            {% if uk_page_obj.number == num %}
+                            <li class="page-item active" aria-current="page">
+                                <span class="page-link">{{ num }}</span>
+                            </li>
+                            {% else %}
+                            <li class="page-item">
+                                <a class="page-link" href="?uk_page={{ num }}">{{ num }}</a>
+                            </li>
+                            {% endif %}
+                            {% endfor %}
+                            <!-- Next page link -->
+                            {% if uk_page_obj.has_next %}
+                            <li class="page-item">
+                                <a class="page-link" href="?uk_page={{ uk_page_obj.next_page_number }}" aria-label="Next">
+                                    Следующая
+                                </a>
+                            </li>
+                            <li class="page-item">
+                                <a class="page-link" href="?uk_page={{ uk_page_obj.paginator.num_pages }}" aria-label="Last">
+                                    Последняя &raquo;
+                                </a>
+                            </li>
+                            {% endif %}
+                        </ul>
+                    </nav>
+                </div>
+    <!-- PK Tab -->
+                <div class="tab-pane fade" id="pk-tab" role="tabpanel" aria-labelledby="nav-pk-tab" tabindex="0">
+                    <ul class="list-group list-group-flush">
+                        {% for compt in pk_page_obj %}
+                        <li class="list-group-item">{{ compt.comp_name|upper }}</li>
+                        {% endfor %}
+                    </ul>
+                    <!-- Pagination for PK Competencies -->
+                    <!-- No pagination provided for PK Competencies in this example -->
+                </div>
+            </div>
+                        <br>
+      </div>
+  </div>
+  </div>
+            <br>
+<div class="row">
+    <div class="col-md-4 offset-md-1 px-0">
+
+       <div class="h-80 p-5 border rounded-3 shadow">
+        <h3 class="text-secondary"><b>Успеваемость</b></h3>
+        <nav>
+
+            <div class="nav nav-tabs card-header-tabs" id="marks-tabs" role="tablist">
+                {% for course, marks in marks_by_course.items %}
+                    <button class="nav-link {% if forloop.first %}active{% endif %}" id="nav-{{ course }}-tab" data-bs-toggle="tab" data-bs-target="#course{{ forloop.counter }}" type="button" role="tabs" aria-controls="course{{ forloop.counter }}" aria-selected="{% if forloop.first %}true{% else %}false{% endif %}"> Курс {{ course }}</button>
+                {% endfor %}
+            </div>
+        </nav>
+        <div class="tab-content">
+            {% for course, marks in marks_by_course.items %}
+                <div class="tab-pane fade {% if forloop.first %}show active{% endif %}" id="course{{ forloop.counter }}" role="tabpanel" aria-labelledby="nav-{{ course }}-tab">
+                    <hr class="horizontal light mt-0">
+                    <table class="table">
+                        <thead>
+                            <tr>
+                                <th>Дисциплина</th>
+                                <th>Оценка</th>
+                                <th>Зачет/экзамен</th>
+                                <!-- Add other relevant headers as needed -->
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for mark in marks %}
+                                <tr>
+                                    <td>{{ mark.discipline_name }}</td>
+                                    <td>{{ mark.value }}</td>
+                                    <td>{{ mark.type_control }}</td>
+                                    <!-- Add other relevant data fields as needed -->
+                                </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+            {% endfor %}
+        </div>
+    </div>
+        </div>
+
+       <div class="col-6">
+
+            <div class="h-90 overflow-auto p-5 border rounded-3 shadow">
+
+                <h3 class="text-secondary"><b>Траектория успеваемости по среднему баллу</b></h3>
+                <hr class="horizontal dark mt-0">
+                {{ graph_htm | safe }}
+            </div>
+        </div>
+</div>
+<div class="container">
+
+
+<br>
+<script>
+ document.addEventListener('DOMContentLoaded', function () {
+        // Находим все вкладки
+        var tabs = document.querySelectorAll('.nav-links');
+
+        // Для каждой вкладки добавляем обработчик события click
+        tabs.forEach(function (tab) {
+            tab.addEventListener('click', function (event) {
+                // Предотвращаем переход по ссылке (если кнопка является ссылкой)
+                event.preventDefault();
+
+                // Удаляем классы "show" и "active" у всех вкладок и их содержимого
+                document.querySelectorAll('.nav-links').forEach(function (tab) {
+                    tab.classList.remove('active');
+                });
+                document.querySelectorAll('.tab-pane').forEach(function (tab) {
+                    tab.classList.remove('show', 'active');
+                });
+
+                // Добавляем классы "show" и "active" только к текущей вкладке и ее содержимому
+                var target = document.querySelector(this.getAttribute('data-bs-target'));
+                this.classList.add('active');
+                target.classList.add('show', 'active');
+            });
+        });
+    });
+document.addEventListener('DOMContentLoaded', function () {
+    // Находим все кнопки вкладок
+    var tabs = document.getElementById('.nav-{{ course }}-tab');
+
+    // Для каждой кнопки вкладки добавляем обработчик события click
+    tabs.forEach(function (tab) {
+        tab.addEventListener('click', function (event) {
+            // Предотвращаем переход по ссылке (если кнопка является ссылкой)
+            event.preventDefault();
+
+            // Удаляем класс "active" у всех кнопок вкладок
+            document.getElementById('.nav-{{ course }}-tab').forEach(function (tab) {
+                tab.classList.remove('active');
+            });
+
+            // Удаляем класс "show" и "active" у всех содержимого вкладок
+            document.getElementById('course{{ course }}').forEach(function (tab) {
+                tab.classList.remove('show', 'active');
+            });
+
+            // Добавляем класс "active" только к текущей кнопке вкладки
+            this.classList.add('active');
+
+            // Получаем идентификатор целевой вкладки из атрибута data-bs-target текущей кнопки вкладки
+            var targetId = this.getAttribute('data-bs-target');
+
+            // Добавляем классы "show" и "active" только к содержимому целевой вкладки
+            var targetContent = document.querySelector(targetId);
+            if (targetContent) {
+                targetContent.classList.add('show', 'active');
+            }
+        });
+    });
+});
+
+ $(document).ready(function(){
+        $('.pagination a').on('click', function(e){
+            e.preventDefault();
+            var url = $(this).attr('href');
+            $.get(url, function(data){
+                $('#compt-content').html(data);
+                window.history.pushState("", "", url);
+            });
+        });
+    });
+
+
+ </script>
+
+
+{% endblock %}
+
